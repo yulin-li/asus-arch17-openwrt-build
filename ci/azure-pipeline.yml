@@ -6,17 +6,20 @@ jobs:
   steps:
     - bash: |
         sudo apt -y update
-        sudo apt -y install build-essential asciidoc binutils bzip2 gawk gettext libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
-      displayName: 'install dependencies'
+        sudo apt -y install asciidoc gettext libncurses5-dev libz-dev lib32gcc1 libc6-dev-i386 flex uglifyjs gcc-multilib msmtp texinfo xmlto qemu-utils upx libelf-dev autopoint device-tree-compiler
+      displayName: 'Install dependencies'
     - bash: |
         ./ci/build.sh
       displayName: 'Build'
+    - bash: |
+        cp -r ./lede/bin/targets/ $(Build.ArtifactStagingDirectory)/
+      displayName: 'Copy files to artifacts directory'
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: lede
         publishLocation: Container
       condition: succeededOrFailed()
-      displayName: 'publish artifacts'
+      displayName: 'Publish artifacts'
 
   timeoutInMinutes: 300

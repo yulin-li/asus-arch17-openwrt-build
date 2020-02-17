@@ -2,16 +2,18 @@
 set -e
 
 git clone https://github.com/coolsnowwolf/lede.git
-cd lede/feeds/luci/applications/
+cd lede
+./scripts/feeds update -a
+./scripts/feeds install -a
+
+cd feeds/luci/applications/
 git clone https://github.com/tty228/luci-app-serverchan.git
 cd ../../..
-./scripts/feeds install -a
 ./scripts/feeds update -a
+./scripts/feeds install -a
 
-cp -rf $(Build.Repository.LocalPath)/ci/.config .
+cp -rf ../ci/.config .
 
-echo "CPU Cores: "`grep -c ^processor /proc/cpuinfo`
+echo "CPU Cores: "$(nproc)
 
-make -j`grep -c ^processor /proc/cpuinfo` V=99
-
-cp -r bin $(Build.ArtifactStagingDirectory)/
+make -j$(nproc)
