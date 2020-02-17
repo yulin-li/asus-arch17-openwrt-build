@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+rm -rf lede
 git clone https://github.com/coolsnowwolf/lede.git
 cd lede
 ./scripts/feeds update -a
