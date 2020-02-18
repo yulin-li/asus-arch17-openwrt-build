@@ -20,10 +20,42 @@ jobs:
         sudo apt -y install asciidoc gettext libncurses5-dev libz-dev lib32gcc1 libc6-dev-i386 flex uglifyjs gcc-multilib msmtp texinfo xmlto qemu-utils upx libelf-dev autopoint device-tree-compiler
       displayName: 'Install dependencies'
     - bash: |
-        ./ci/build.sh
+        set -e
+
+        git clone https://github.com/coolsnowwolf/lede.git
+        cd lede
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        
+        cd package/feeds/luci/
+        git clone https://github.com/tty228/luci-app-serverchan.git
+        cd ../../..
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        
+        cp -rf ../ci/.config .
+        
+        echo "CPU Cores: "$(nproc)
+        
+        # set +e to allow capturing exit codes
+        set +e
+        for retry in {{0..3}};
+        do
+            make -j$(nproc)
+            exitCode=$?
+        if [[ $exitCode == 0 ]]; then
+            echo "Build succeeded, RetryCount( $retry )"
+            break
+        else
+            echo "Build failed during retry( $retry )."
+            sleep 2s
+        fi
+        done
+        set -e
+        exit ${exitCode}
       displayName: 'Build'
     - bash: |
-        cp -r ./lede/bin/targets/ $(Build.ArtifactStagingDirectory)/
+        cp -rf ./lede/bin/targets/ $(Build.ArtifactStagingDirectory)/
       displayName: 'Copy files to artifacts directory'
     - task: PublishBuildArtifacts@1
       inputs:
