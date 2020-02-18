@@ -1,13 +1,12 @@
 #!/bin/sh
 set -e
 
-rm -rf lede
 git clone https://github.com/coolsnowwolf/lede.git
 cd lede
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
-cd feeds/luci/applications/
+cd package/feeds/luci/
 git clone https://github.com/tty228/luci-app-serverchan.git
 cd ../../..
 ./scripts/feeds update -a
