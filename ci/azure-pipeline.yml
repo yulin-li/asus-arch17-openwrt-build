@@ -27,32 +27,15 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         
-        cd package/feeds/luci/
-        git clone https://github.com/tty228/luci-app-serverchan.git
-        cd ../../..
+        git clone https://github.com/tty228/luci-app-serverchan.git package/feeds/luci/luci-app-serverchan
+        git clone https://github.com/destan19/OpenAppFilter.git package/OpenAppFilter
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         
         cp -rf ../ci/.config .
         
         echo "CPU Cores: "$(nproc)
-        
-        # set +e to allow capturing exit codes
-        set +e
-        for retry in {{0..3}};
-        do
-            make -j$(nproc)
-            exitCode=$?
-        if [[ $exitCode == 0 ]]; then
-            echo "Build succeeded, RetryCount( $retry )"
-            break
-        else
-            echo "Build failed during retry( $retry )."
-            sleep 2s
-        fi
-        done
-        set -e
-        exit ${exitCode}
+        make -j$(nproc) || make -j$(nproc) || make -j1 V=s
       displayName: 'Build'
     - bash: |
         cp -rf ./lede/bin/targets/ $(Build.ArtifactStagingDirectory)/
