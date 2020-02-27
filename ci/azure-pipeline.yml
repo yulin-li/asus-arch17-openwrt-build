@@ -37,6 +37,7 @@ jobs:
     - bash: |
         set -e
         
+        cd lede
         echo "CPU Cores: "$(nproc)
         make -j$(nproc) || make -j$(nproc) || make -j1 V=s
       displayName: 'Build'
