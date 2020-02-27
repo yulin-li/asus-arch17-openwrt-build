@@ -33,6 +33,9 @@ jobs:
         ./scripts/feeds install -a
         
         cp -rf ../ci/.config .
+      displayName: 'Checkout lede, update feeds'
+    - bash: |
+        set -e
         
         echo "CPU Cores: "$(nproc)
         make -j$(nproc) || make -j$(nproc) || make -j1 V=s
