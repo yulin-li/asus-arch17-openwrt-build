@@ -1,9 +1,12 @@
-name: CI
+name: ARCH-17 Build
 
 on:
   push:
     branches: 
       - master
+    paths: 
+      - '.github/workflows/arch17-ci.yml'
+      - 'ci/.config'
   pull_request:
   schedule:
     - cron: '0 2 * * 5'
