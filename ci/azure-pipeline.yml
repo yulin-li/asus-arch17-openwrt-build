@@ -33,7 +33,8 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         
-        cp -rf ../ci/.config .
+        cp -rf ../ci/config.seed .config
+        make defconfig
       displayName: 'Checkout lede, update feeds'
     - bash: |
         set -e
