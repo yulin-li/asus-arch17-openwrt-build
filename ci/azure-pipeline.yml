@@ -18,7 +18,7 @@ jobs:
     - bash: |
         sudo apt -y update
         sudo apt -y upgrade
-        sudo apt -y install asciidoc gettext libncurses5-dev libz-dev lib32gcc1 libc6-dev-i386 flex uglifyjs gcc-multilib msmtp texinfo xmlto qemu-utils upx libelf-dev autopoint device-tree-compiler
+        sudo apt -y install asciidoc gettext libncurses5-dev libz-dev lib32gcc1 libc6-dev-i386 flex uglifyjs gcc-multilib msmtp texinfo xmlto qemu-utils upx libelf-dev autopoint device-tree-compiler antlr3 gperf
       displayName: 'Install dependencies'
     - bash: |
         set -e
