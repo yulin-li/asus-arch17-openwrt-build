@@ -6,7 +6,7 @@ on:
       - master
     paths: 
       - '.github/workflows/arch17-ci.yml'
-      - 'ci/.config'
+      - 'ci/config.seed'
   pull_request:
   schedule:
     - cron: '0 2 * * 5'
