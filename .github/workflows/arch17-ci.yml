@@ -10,6 +10,7 @@ on:
   pull_request:
   schedule:
     - cron: '0 2 * * 5'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -39,11 +40,16 @@ jobs:
           # ln -s /mnt/openwrt/feeds ./feeds
           # ln -s /mnt/openwrt/staging_dir ./staging_dir
           df -h
-      - name: Checkout lede, update feeds
+
+      - name: Checkout lede repo
+        uses: actions/checkout@v2
+        with:
+          repository: coolsnowwolf/lede
+          path: lede
+
+      - name: Update feeds
         run: |
           set -e
-
-          git clone https://github.com/coolsnowwolf/lede.git
           cd lede
           sed -i 's/#src-git/src-git/g' ./feeds.conf.default
           ./scripts/feeds update -a
